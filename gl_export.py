@@ -46,6 +46,7 @@ def gitlab_grab_comments(gitlab_client, project_id, issue_id):
         else:
             break
 
+    print comments
     return comments
 
 def gitlab_build_comments(gitlab_client, project_id, issue_id):
@@ -107,7 +108,10 @@ print("Accessing project issues from "+str(gitlab_id))
 
 issues = build_gitlab_issues(gitl, gitlab_id)
 
-fn = sys.argv[3] or "export.json"
+try:
+  fn = sys.argv[3]
+except:
+  fn = "export.json"
 
 
 with open(fn, "w") as text_file:
