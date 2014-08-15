@@ -2,6 +2,8 @@ import json
 import sys
 import re
 
+print("gl_map.py (c) Tom Wiesing 2014")
+
 if len(sys.argv) < 3:
     print("Use: gl_map.py <input_file> <output_file> [<usermap> = usermap.json]")
     sys.exit(0)

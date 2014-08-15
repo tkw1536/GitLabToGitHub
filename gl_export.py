@@ -8,6 +8,12 @@ import requests
 import gitlab
 import getpass
 
+print("gl_export.py (c) Tom Wiesing 2014")
+
+if len(sys.argv) < 3:
+    print("Usage: gl_export.py <gitlab_url> <gitlab_user> [<destination> = export.json]")
+    sys.exit(0)
+
 def gitlab_get(gilab_client, url, page=1, per_page=100):
     data = {'page': page, 'per_page': per_page}
 
@@ -62,14 +68,6 @@ def build_gitlab_issues(gitlab_client, project_id):
     } for i in gitlab_grab_issues(gitlab_client, project_id)]
 
 user_regex = r"@(.+?)\b"
-
-print("Exporting issues from Gitlab")
-
-if len(sys.argv) < 3:
-    print("Usage: gl_export.py <gitlab_url> <gitlab_user> [<destination> = export.json]")
-    sys.exit(0)
-
-
 
 gitlab_user = sys.argv[2]
 
