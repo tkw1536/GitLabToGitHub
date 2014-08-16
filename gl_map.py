@@ -37,10 +37,12 @@ def map_text(text):
 
 def map_issue(issue):
     return {
+        "title": map_text(issue["title"]),
         "body": map_text(issue["body"]),
         "labels": issue["labels"],
-        "closed": issue["closed"],
-        "comments": [{"body": map_text(c["body"])} for c in issue["comments"] if not discard_regex.match(c["body"])]
+        "closed": issue["closed"], 
+        "comments": [{"body": map_text(c["body"])} for c in issue["comments"] if not discard_regex.match(c["body"])],
+        "issue_id": issue["issue_id"]
     }
 
 # Map everything

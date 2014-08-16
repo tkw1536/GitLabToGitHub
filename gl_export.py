@@ -36,8 +36,7 @@ def gitlab_grab_issues(gitlab_client, project_id):
             page = page + 1
         else:
             break
-
-    return issues
+    return sorted(issues, key=lambda i:i["iid"])
 
 def gitlab_grab_comments(gitlab_client, project_id, issue_id):
     comments = []
@@ -52,7 +51,6 @@ def gitlab_grab_comments(gitlab_client, project_id, issue_id):
         else:
             break
 
-    print comments
     return comments
 
 def gitlab_build_comments(gitlab_client, project_id, issue_id):
@@ -64,7 +62,8 @@ def build_gitlab_issues(gitlab_client, project_id):
         "body": i["description"],
         "labels": i["labels"],
         "comments": gitlab_build_comments(gitlab_client, project_id, i["id"]),
-        "closed": i["state"] == "closed"
+        "closed": i["state"] == "closed",
+        "issue_id": i["iid"]
     } for i in gitlab_grab_issues(gitlab_client, project_id)]
 
 user_regex = r"@(.+?)\b"
@@ -72,13 +71,12 @@ user_regex = r"@(.+?)\b"
 gitlab_user = sys.argv[2]
 
 # extarct the gitlab host and repo from the first argument
-url_regex = r'^http(?:s?)://(.*)/([^/]+/[^/]+)(?:/?)$|^git@(.*):([^/]+/[^/]+)\.git$'
+url_regex = r'(?:https?://|git@)(.*)(?:/|:)([^/]+/[^/\.]+)(?:\.git)?'
 gitlab_host = re.findall(url_regex, sys.argv[1])
 
 # and save them in some variables
 gitlab_repo = gitlab_host[0][1]
 gitlab_host = "http://"+gitlab_host[0][0]
-
 # and try the password.
 gitlab_pass = getpass.getpass()
 
